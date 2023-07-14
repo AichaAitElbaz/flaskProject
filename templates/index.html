@@ -1,0 +1,43 @@
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="./static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="./static/css2/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+
+<form action="/predict" method="POST">
+    latitude : <input type="text" name="latitude"> <br>
+    longitude : <input type="text" name="longitude"> <br>
+    annee : <input type="text" name="annee"> <br>
+    mois : <input type="text" name="mois"> <br>
+    P : <input type="text" name="P"> <br>
+    T : <input type="text" name="T"> <br>
+    Tmax : <input type="text" name="Tmax"> <br>
+    Tmin : <input type="text" name="Tmin"> <br>
+    PET : <input type="text" name="PET"> <br>
+    qm 2089/53 m3/s : <input type="text" name="qm"> <br>
+    SPI3 : <input type="text" name="SPI3"> <br>
+    SPI6 : <input type="text" name="SPI6"> <br>
+    SPI9 : <input type="text" name="SPI9"> <br>
+    SPI12 : <input type="text" name="SPI12"> <br>
+    SPI8 : <input type="text" name="SPI8"> <br>
+    SP24 : <input type="text" name="SP24"> <br>
+    SP32 : <input type="text" name="SP32"> <br>
+    SPEI3 : <input type="text" name="SPEI3"> <br>
+    SPEI6 : <input type="text" name="SPEI6"> <br>
+    SPEI9 : <input type="text" name="SPEI9"> <br>
+    SPEI12 : <input type="text" name="SPEI12"> <br>
+    SPEI8 : <input type="text" name="SPEI8"> <br>
+    SPEI24 : <input type="text" name="SPEI24"> <br>
+    SPEI32 : <input type="text" name="SPEI32"> <br>
+    3976_SDAT : <input type="text" name="3976_SDAT"> <br>
+    Class : {{result}} <br>
+    <input type="submit" value="Predict">
+</form>
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src=".js/materialize.js"></script>
+  <script src="js/init.js"></script>
+</body>
+</html>
