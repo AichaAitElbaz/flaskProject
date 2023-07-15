@@ -4,7 +4,7 @@ import sklearn
 
 app = Flask(__name__)
 
-model = pickle.load(open('savedmodel.sav' , 'rb'))
+model = pickle.load(open('classificaion_model.sav' , 'rb'))
 
 @app.route('/')
 def home():
