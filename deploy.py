@@ -9,7 +9,7 @@ model = pickle.load(open('savedmodel.sav' , 'rb'))
 @app.route('/')
 def home():
     result = ''
-    return render_template('index.html', **locals())
+    return render_template('App.jsx', **locals())
 
 
 @app.route('/predict' , methods=['POST', 'GET'])
@@ -43,7 +43,7 @@ def predict():
        PET, qm, SPI3, SPI6, SPI9, SPI12, SPI8,
        SP24, SP32, SPEI3, SPEI6, SPEI9, SPEI12, SPEI8, SPEI24,
        SPEI32, SDAT]])[0]
-    return render_template('index.html' , **locals())
+    return render_template('App.jsx' , **locals())
 
 
 if __name__ == '__main__' :
