@@ -20,7 +20,7 @@ const yearOptions = Array.from({ length: currentYear - startYear + 1 }, (_, inde
 
   const handleInputChange = (index, event) => {
     const inputValue = event.target.value;
-    if (/^\d*$/.test(inputValue)) {
+    if (/^-?\d*\.?\d*$/.test(inputValue)) {
       const newInputs = [...inputs];
       newInputs[index] = inputValue;
       setInputs(newInputs);
