@@ -1,10 +1,7 @@
+// Import necessary dependencies
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+// Render the app using the createRoot method
+createRoot(document.getElementById('root')).render(<App />);

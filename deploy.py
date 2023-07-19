@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request
+# app.py
+from flask import Flask, render_template, request, jsonify
 import pickle
 import sklearn
 
 app = Flask(__name__)
 
-model = pickle.load(open('savedmodel.sav' , 'rb'))
+model = pickle.load(open('savedmodel.sav', 'rb'))
 
 @app.route('/')
 def home():
@@ -12,39 +13,19 @@ def home():
     return render_template('App.jsx', **locals())
 
 
-@app.route('/predict' , methods=['POST', 'GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    latitude = float(request.form['latitude'])
-    longitude = float(request.form['longitude'])
-    annee = float(request.form['annee'])
-    mois = float(request.form['mois'])
-    P = float(request.form['P'])
-    T = float(request.form['T'])
-    Tmax = float(request.form['Tmax'])
-    Tmin = float(request.form['Tmin'])
-    PET = float(request.form['PET'])
-    qm = float(request.form['qm'])
-    SPI3 = float(request.form['SPI3'])
-    SPI6 = float(request.form['SPI6'])
-    SPI9 = float(request.form['SPI9'])
-    SPI12 = float(request.form['SPI12'])
-    SPI8 = float(request.form['SPI8'])
-    SP24 = float(request.form['SP24'])
-    SP32 = float(request.form['SP32'])
-    SPEI3 = float(request.form['SPEI3'])
-    SPEI6 = float(request.form['SPEI6'])
-    SPEI9 = float(request.form['SPEI9'])
-    SPEI12 = float(request.form['SPEI12'])
-    SPEI8 = float(request.form['SPEI8'])
-    SPEI24 = float(request.form['SPEI24'])
-    SPEI32 = float(request.form['SPEI32'])
-    SDAT = float(request.form['3976_SDAT'])
-    result = model.predict([[latitude, longitude, annee, mois, P, T, Tmax, Tmin,
-       PET, qm, SPI3, SPI6, SPI9, SPI12, SPI8,
-       SP24, SP32, SPEI3, SPEI6, SPEI9, SPEI12, SPEI8, SPEI24,
-       SPEI32, SDAT]])[0]
-    return render_template('App.jsx' , **locals())
+    data = request.get_json()
+    inputs = [
+        data['latitude'], data['longitude'], data['annee'], data['mois'], data['P'], data['T'],
+        data['Tmax'], data['Tmin'], data['PET'], data['qm'], data['SPI3'], data['SPI6'], data['SPI9'],
+        data['SPI12'], data['SPI8'], data['SP24'], data['SP32'], data['SPEI3'], data['SPEI6'],
+        data['SPEI9'], data['SPEI12'], data['SPEI8'], data['SPEI24'], data['SPEI32'], data['SDAT']
+    ]
+    predicted_class = int(model.predict([inputs])[0])  # Convert to int
+    response = {'predicted_class': predicted_class}
+    return jsonify(response)
 
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     app.run(debug=True)
