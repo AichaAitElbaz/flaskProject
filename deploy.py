@@ -4,53 +4,24 @@ import sklearn
 import pandas as pd
 app = Flask(__name__)
 
-model = pickle.load(open('regression_model.sav' , 'rb'))
+model = pickle.load(open('classification_model.sav' , 'rb'))
 
 @app.route('/')
 def home():
     result = ''
-    return render_template('classif.html', **locals())
+    return render_template('App.jsx', **locals())
 
+def your_prediction_function(input_data):
+    # Replace this with your actual prediction logic using your model
+    prediction = model.predict([input_data])[0]
+    return prediction
 
-@app.route('/predict' , methods=['POST', 'GET'])
+@app.route('/predict')
 def predict():
-    latitude = float(request.form['latitude'])
-    longitude = float(request.form['longitude'])
-    annee = float(request.form['annee'])
-    mois = float(request.form['mois'])
-    P = float(request.form['P'])
-    T = float(request.form['T'])
-    Tmax = float(request.form['Tmax'])
-    Tmin = float(request.form['Tmin'])
-    PET = float(request.form['PET'])
-    qm = float(request.form['qm'])
-    SPI3 = float(request.form['SPI3'])
-    SPI6 = float(request.form['SPI6'])
-    SPI9 = float(request.form['SPI9'])
-    SPI12 = float(request.form['SPI12'])
-    SPI8 = float(request.form['SPI8'])
-    SP24 = float(request.form['SP24'])
-    SP32 = float(request.form['SP32'])
-    SPEI3 = float(request.form['SPEI3'])
-    SPEI6 = float(request.form['SPEI6'])
-    SPEI9 = float(request.form['SPEI9'])
-    SPEI12 = float(request.form['SPEI12'])
-    SPEI8 = float(request.form['SPEI8'])
-    SPEI24 = float(request.form['SPEI24'])
-    SPEI32 = float(request.form['SPEI32'])
-    SDAT = float(request.form['3976_SDAT'])
-    result = model.predict([[latitude, longitude, annee, mois, P, T, Tmax, Tmin,
-       PET, qm, SPI3, SPI6, SPI9, SPI12, SPI8,
-       SP24, SP32, SPEI3, SPEI6, SPEI9, SPEI12, SPEI8, SPEI24,
-       SPEI32, SDAT]])[0]
-    return render_template('index.html' , **locals())
-
-
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
-
-from flask import request
+    input_data = request.json
+    prediction_result = your_prediction_function(input_data)
+    # return jsonify({'prediction': prediction_result})
+    return 'jkgkkk'
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
