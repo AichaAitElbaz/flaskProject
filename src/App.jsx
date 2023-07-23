@@ -14,10 +14,11 @@ const App = () => {
   return (
     <div className="app">
       {/* <form >
-          <FormInput/> */}
+          <FormInput/>
+          </form> */}
           <Graphs/>
         
-      {/* </form> */}
+     
      
     </div>
   );

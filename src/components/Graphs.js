@@ -6,27 +6,9 @@ import axios from 'axios'; // Import axios for HTTP requests
 import './graphs.css'; // Import the CSS file
   
 function Linechart() {
-  // Add a new state to store the predicted classes
-  const [predictedClasses, setPredictedClasses] = useState([]);
-    // Function to send data to the server for prediction
-    const predictData = async () => {
-      try {
-        const response = await axios.post('/predict', filteredData);
-        const predictedClasses = response.data.predicted_class;
-        setPredictedClasses(predictedClasses);
-      } catch (error) {
-        console.error('Prediction failed:', error);
-      }
-    };
+ 
+  const [predictionValues, setPredictionValues] = useState([]);
 
-    const series = [
-    
-      {
-        name: 'Predicted',
-        data: predictedClasses, // Use the predictedClasses state
-      },
-    ];
-  
   const startYear = 1980;
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from(
@@ -49,6 +31,8 @@ function Linechart() {
       name: "Tmin",
       data: [],
     },
+        
+ 
   ]);
 
   const [option, setOption] = useState({
@@ -91,9 +75,13 @@ function Linechart() {
       console.log('Please select your file');
     }
   };
-  
+  const series = [{
+    name: "Prediction Value",
+    data: predictionValues,
+  }];
   // submit event
   const handleFileSubmit = (e) => {
+    
     e.preventDefault();
     if(excelFile!==null){
       const workbook = XLSX.read(excelFile,{type: 'buffer'});
@@ -105,6 +93,7 @@ function Linechart() {
     const year = parseInt(item.annee, 10);
     const month = parseInt(item.mois, 10);
     item.Month = new Date(year, month - 1, 1);
+   
   });
 
   // Sort the data based on the "Month" column
@@ -112,27 +101,64 @@ function Linechart() {
   
       setExcelData(data);
            // Request prediction for the filteredData
-       predictData();
-       console.log(predictedClasses)
-    }};
+     // Loop through each row of data and make individual predictions
+     data.forEach((rowData) => {
+      const payload = {
+        latitude:rowData.latitude,
+        longitude: rowData.longitude,
+        annee: rowData.annee,
+        mois: rowData.mois,
+        P: rowData.P,
+        T: rowData.T,
+        Tmax: rowData.Tmax,
+        Tmin: rowData.Tmin,
+        PET: rowData.PET,
+        qm:rowData.qm,
+        SPI3:rowData.SPI3,
+        SPI6:rowData.SPI6,
+        SPI9:rowData.SPI9,
+        SPI12:rowData.SPI12,
+        SPI8:rowData.SPI8,
+        SP24:rowData.SP24,
+        SP32:rowData.SP32,
+        SPEI3:rowData.SPEI3,
+        SPEI6:rowData.SPEI6,
+        SPEI9:rowData.SPEI9,
+        SPEI12:rowData.SPEI12,
+        SPEI8:rowData.SPEI8,
+        SPEI24:rowData.SPEI24,
+        SPEI32:rowData.SPEI32,
+        SDAT:rowData.SDAT,       
+      };
+      // Send the POST request to the server for prediction
+      axios
+      .post('http://localhost:3000/regr', payload)
+      .then((response) => {
+        const prediction_value = response.data;
+        console.log("prediction_value",prediction_value);
+
+        if (rowData.annee === Number(userYear)) {
+          setPredictionValues((prevValues) => [...prevValues, prediction_value]);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle error cases
+      });
+    });
+  }
+    };
 
   const [userYear, setUserYear] = useState('');
 
   // Use useEffect to update the product state when excelData changes
   useEffect(() => {
     // Filter the excelData based on the selected year
-    const filteredData = excelData ? excelData.filter((item) => item.annee === Number(userYear)) : [];
 
     // Extract Tmax and Tmin data from filtered data
     const tmaxData = filteredData.map(item => item.Tmax);
     const tminData = filteredData.map(item => item.Tmin);
-    const series = [
- 
-      {
-        name: 'Predicted',
-        data: predictedClasses, // Use the predictedClasses state
-      },
-    ];
+    
     // Update the product state with filtered Tmax and Tmin data
     setProduct([
       {
@@ -146,6 +172,19 @@ function Linechart() {
     ]);
   }, [excelData, userYear]);
   const filteredData = excelData ? excelData.filter((item) => item.annee === Number(userYear)) : [];
+    // Sort the filteredData based on the "Month" column
+    filteredData.sort((a, b) => a.Month - b.Month);
+  const option2 = {
+    title: { text: "Prediction Values" },
+    xaxis: {
+      title: { text: "Months" },
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    },
+    yaxis: {
+      title: { text: "Prediction Value" },
+    },
+  };
+
 
   return (
     <div className="wrapper">
@@ -169,32 +208,6 @@ function Linechart() {
       )}
     </form>
 
-    {/* view data */}
-    {/* view data */}
-    <div className="viewer">
-        {filteredData.length > 0 ? (
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Tmax</th>
-                <th>Tmin</th>
-                {/* Add more columns for other temperature data if needed */}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.Tmax}</td>
-                  <td>{item.Tmin}</td>
-                  {/* Add more cells for other temperature data if needed */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No data to display. Please upload an Excel file and select a year.</p>
-        )}
-      </div>
 
       <Chart
         type="line"
@@ -203,7 +216,14 @@ function Linechart() {
         series={product}
         options={option}
       />
-        <Chart type="line" width={400} height={300} series={series} options={option} />
+       <Chart
+      type="line"
+      width={400}
+      height={300}
+      series={series}
+      options={option2}
+    />
+  
     </div>
   );
 }
