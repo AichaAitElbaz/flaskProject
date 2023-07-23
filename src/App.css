@@ -1,5 +1,5 @@
 .app {
-  display: flex;
+  background-color: aliceblue;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -10,13 +10,36 @@
     url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500");
   background-size: cover;
   background-position: center;
+  margin: 30px;
 }
 
 form{
     background-color: white;
-    padding: 0px 60px;
-    border-radius: 10px;
+    
 }
+
+.left {
+  flex: 1;
+  padding: 20px;
+  /* Add any additional styling for the left component */
+}
+
+.right {
+  flex: 1;
+  padding: 20px;
+  /* Add any additional styling for the right component */
+}
+In this setup, the .left class will contain the FormInput and Graphs components, and the .right class will contain the ApexChart component. The justify-content: space-between CSS property ensures that the components are spaced evenly in the available horizontal space.
+
+Now, the Linechart component (left side) will be placed next to the ApexChart component (right side) in a two-column layout.
+
+Ensure that you have the correct import path for the ApexChart component in your App.js, as shown in the code above. If you still face any issues, please double-check your file structure and component imports.
+
+
+
+
+
+
 
 
 .centered {
