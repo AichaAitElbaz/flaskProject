@@ -1,4 +1,66 @@
 .line-chart-container {
-    margin-top: 60px;
+    margin-top: 80px;
+
   }
-  
+/* CSS */
+.charts-container {
+  display: flex; 
+}
+
+/* Optional: To add some spacing between the charts */
+.charts-container > :not(:last-child) {
+  margin-left: 10px;
+
+}
+.form-row {
+  display: flex;
+}
+
+.form-row .col-md-6 {
+  flex: 1;
+  margin-left: 15px; /* Facultatif - Pour ajouter un espace entre les deux éléments */
+}
+
+/* .selectField{
+  height: 15px;
+  margin-left: 20px;
+} */
+#year{
+  padding: 8px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 80px;
+  height: 35px;
+
+
+}
+#label{
+
+  margin-left: 25px;
+}
+#choose_file{
+  height: 35px;
+  text-align: start;
+text-size-adjust: 12px;
+}
+.wrapper{
+  border: 1px solid #d5cce4;
+  padding: 5px;
+  margin-left: 10px;
+  width: 80cm;
+  margin: 0 auto;
+  align-items: left;
+}
+#pie_chart{
+  margin-top: 3cm;
+  margin-left: 2cm;
+}
+.smaller-text-button {
+  font-size: 12px;
+  width: 12cm;
+  height: 25px;
+  text-align: center;
+  margin-left: 45px;
+  line-height: 2px; 
+}

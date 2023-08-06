@@ -6,8 +6,10 @@ import axios from 'axios'; // Import axios for HTTP requests
 import './graphs.css'; // Import the CSS file
   
 function Linechart() {
- 
+
   const [predictionValues, setPredictionValues] = useState([]);
+  const [predictionClasses, setPredictionClasses] = useState([]);
+
 
   const startYear = 1980;
   const currentYear = new Date().getFullYear();
@@ -36,14 +38,18 @@ function Linechart() {
   ]);
 
   const [option, setOption] = useState({
-    title: { text: "Temperature of years" },
+    title: { text: "Température annuelle" },
     xaxis: {
-      title: { text: "Months" },
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      title: { text: "Mois" },
+      categories: ['Jan', 'Fév', 'Mar', 'Arv', 'Mai', 'Jui', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Déc'],
+
+    
     },
     yaxis: {
-      title: { text: "Temperature" },
+      title: { text: "Températures" },
     },
+    colors: customColors,
+
   });
 
   // onchange states
@@ -128,14 +134,13 @@ function Linechart() {
         SPEI8:rowData.SPEI8,
         SPEI24:rowData.SPEI24,
         SPEI32:rowData.SPEI32,
-        SDAT:rowData.SDAT,       
       };
       // Send the POST request to the server for prediction
       axios
       .post('http://localhost:3000/regr', payload)
       .then((response) => {
         const prediction_value = response.data;
-        console.log("prediction_value",prediction_value);
+
 
         if (rowData.annee === Number(userYear)) {
           setPredictionValues((prevValues) => [...prevValues, prediction_value]);
@@ -145,10 +150,53 @@ function Linechart() {
         console.error(error);
         // Handle error cases
       });
+      // Send the POST request to the server for prediction
+      axios
+      .post('http://localhost:3000/predict', payload)
+      .then((response) => {
+        const prediction_class = response.data;
+        console.log("prediction_class",prediction_class);
+
+
+        if (rowData.annee === Number(userYear)) {
+          setPredictionClasses((prevClasses) => [...prevClasses, prediction_class]);
+
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle error cases
+      });
+
     });
+
   }
     };
+    const preparePieChartData = () => {
+      const customColors = [
+        'rgba(255, 99, 132, 0.6)', // First slice color
+        'rgba(54, 162, 235, 0.6)', // Second slice color
+        'rgba(255, 206, 86, 0.6)', // Third slice color
+        // Add more colors as needed for other slices
+      ];
+      const classCounts = {};
+      predictionClasses.forEach((predictionObj) => {
+        const prediction = predictionObj.predicted_class;
+        classCounts[prediction] = (classCounts[prediction] || 0) + 1;
+      });
+    
+      const labels = Object.keys(classCounts);
+      const data = Object.values(classCounts);
+    
+      return {
+        series: data,
+        options: {
+          labels: labels,
 
+        },
+      };
+    };
+    
   const [userYear, setUserYear] = useState('');
 
   // Use useEffect to update the product state when excelData changes
@@ -170,45 +218,69 @@ function Linechart() {
         data: tminData,
       },
     ]);
-  }, [excelData, userYear]);
+    setPredictionClasses(predictionClasses);
+
+  }, [excelData, userYear]
+  
+  );
   const filteredData = excelData ? excelData.filter((item) => item.annee === Number(userYear)) : [];
     // Sort the filteredData based on the "Month" column
     filteredData.sort((a, b) => a.Month - b.Month);
+    const customColors = ['#E29414','#231483','#528314 '];
+
   const option2 = {
-    title: { text: "Prediction Values" },
+    title: { text: "Valeurs de SDAT prédites" },
     xaxis: {
-      title: { text: "Months" },
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      title: { text: "Mois" },
+      categories: ['Jan', 'Fév', 'Mar', 'Arv', 'Mai', 'Jui', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Déc'],
     },
     yaxis: {
-      title: { text: "Prediction Value" },
+      title: {text: "valeurs prédites"},
     },
+
   };
 
+// Function to prepare data for the pie chart
 
   return (
     <div className="wrapper">
+      <br/>
 
-    <h3>Upload & View Excel Sheets</h3>
-
+    <h3><u>Courbes de prédictions annuelles</u></h3>
+    <br/>
+    <div className="form-group">
     <form className="form-group custom-form" onSubmit={handleFileSubmit}>
-      <input type="file" className="form-control" required onChange={handleFile} />
-      <div className="form-group">
-        <label>Enter the year:</label>
-        <input
-          type="number"
-          className="form-control"
+  <div className="form-row align-items-center">
+  <div className="col-md-6">
+      <input id='choose_file' type="file" className="form-control" required onChange={handleFile} />
+    </div>
+    <div className="col-md-6">
+      <div className="selectField">
+      <label id='label'>Année:</label>
+
+        <select
+          id="year"
           value={userYear}
           onChange={handleYearChange}
-        />
+          className="form-control"
+        >
+          <option value={0}></option>
+          {yearOptions.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
       </div>
-      <button type="submit" className="btn btn-success btn-md">UPLOAD</button>
-      {typeError&&(
-        <div className="alert alert-danger" role="alert">{typeError}</div>
-      )}
-    </form>
+    </div>
+  
+  </div>
+  <button type="submit" className="btn btn-primary smaller-text-button">Confirmer</button>
+</form>
 
-
+</div>
+    <div className="charts-container">
+      
       <Chart
         type="line"
         width={400}
@@ -216,14 +288,25 @@ function Linechart() {
         series={product}
         options={option}
       />
-       <Chart
-      type="line"
-      width={400}
+      <div id='pie_chart'>
+   {predictionClasses.length > 0 && (
+        <Chart
+          options={preparePieChartData().options}
+          series={preparePieChartData().series}
+          type="pie"
+          height={350}
+        />
+      )}
+      </div>
+  </div>
+  
+  <Chart
+       type="line"
+        width={400}
       height={300}
       series={series}
       options={option2}
     />
-  
     </div>
   );
 }
