@@ -1,0 +1,53 @@
+.table th {
+    background-color: #d31414;
+    font-weight: bold;
+    font-size: 16px; /* Increase the font size */
+    padding: 12px; /* Adjust the padding as needed */
+    border: 1px solid #000000;
+    color: #b38fee;
+  }
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 100px;
+  }
+  
+  
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    
+  }
+  .table tr {
+    background-color: #b38fee; /* Set the default background color */
+    color: #000000; /* Set the default text color */
+  }
+  .table th,
+  .table td {
+    padding: 10px;
+    border: 1px solid #000000;
+  }
+  .table tr:hover td {
+    color: #b38fee; /* Change to the desired text color */
+  }
+  .table th {
+    background-color: #2c0245;
+    font-weight: bold;
+    color: #b38fee;
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #c4aaee;
+  }
+  
+  .table tr:hover {
+    background-color: #2c0245; /* Change to the desired hover color */
+    color: #ffffff; /* Change to the desired text color on hover */
+  }
+  

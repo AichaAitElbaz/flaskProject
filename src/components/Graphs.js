@@ -52,6 +52,9 @@ function Linechart() {
 
   });
 
+
+  const [tableData, setTableData] = useState([]);
+  const [tableResponses, setTableResponses] = useState([]);
   // onchange states
   const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
@@ -87,7 +90,7 @@ function Linechart() {
   }];
   // submit event
   const handleFileSubmit = (e) => {
-    
+    generateTable();
     e.preventDefault();
     if(excelFile!==null){
       const workbook = XLSX.read(excelFile,{type: 'buffer'});
@@ -140,7 +143,7 @@ function Linechart() {
       .post('http://localhost:3000/regr', payload)
       .then((response) => {
         const prediction_value = response.data;
-
+        console.log("prediction_value",prediction_value)
 
         if (rowData.annee === Number(userYear)) {
           setPredictionValues((prevValues) => [...prevValues, prediction_value]);
@@ -172,6 +175,66 @@ function Linechart() {
 
   }
     };
+    const generateTable = () => {
+   
+      const dataRows = [];
+      const responseRows = [];
+      if (excelFile !== null) {
+        const workbook = XLSX.read(excelFile, { type: 'buffer' });
+        const worksheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[worksheetName];
+        const data = XLSX.utils.sheet_to_json(worksheet);
+    
+        Promise.all(
+          data.map((rowData) => {
+            const payload = {
+              latitude: rowData.latitude,
+              longitude: rowData.longitude,
+              annee: rowData.annee,
+              mois: rowData.mois,
+              P: rowData.P,
+              T: rowData.T,
+              Tmax: rowData.Tmax,
+              Tmin: rowData.Tmin,
+              PET: rowData.PET,
+              qm: rowData.qm,
+              SPI3: rowData.SPI3,
+              SPI6: rowData.SPI6,
+              SPI9: rowData.SPI9,
+              SPI12: rowData.SPI12,
+              SPI8: rowData.SPI8,
+              SP24: rowData.SP24,
+              SP32: rowData.SP32,
+              SPEI3: rowData.SPEI3,
+              SPEI6: rowData.SPEI6,
+              SPEI9: rowData.SPEI9,
+              SPEI12: rowData.SPEI12,
+              SPEI8: rowData.SPEI8,
+              SPEI24: rowData.SPEI24,
+              SPEI32: rowData.SPEI32,
+            };
+    
+            // Send the POST request to the server for prediction
+            return axios.post('http://localhost:3000/regr', payload)
+              .then((response) => {
+                console.log(response.data);
+                responseRows.push(response.data); // Store the response in the responseRows array
+              })
+              .catch((error) => {
+                console.error(error);
+                // Handle error cases
+              });
+          })
+        ).then(() => {
+          // All POST requests have completed, update the state
+          setTableData(data); // Update the state with dataRows
+          setTableResponses(responseRows); // Update the state with responseRows
+          console.log('responseRows', responseRows);
+          console.log('dataRows', data);
+        });
+      }
+    };
+    
     const preparePieChartData = () => {
       const customColors = [
         'rgba(255, 99, 132, 0.6)', // First slice color
@@ -275,7 +338,7 @@ function Linechart() {
     </div>
   
   </div>
-  <button type="submit" className="btn btn-primary smaller-text-button">Confirmer</button>
+  <button type="submit"  className="btn btn-primary smaller-text-button">Confirmer</button>
 </form>
 
 </div>
@@ -307,6 +370,37 @@ function Linechart() {
       series={series}
       options={option2}
     />
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Response</th>
+        </tr>
+      </thead>
+      <tbody>
+        {/* Render table rows for data and responses */}
+        {tableData.map((rowData, index) => (
+          <tr key={index}>
+            <td>
+              {/* Render the data for each row */}
+              <div>
+                Latitude: {rowData.latitude}
+                Longitude: {rowData.longitude}
+                Annee:{rowData.annee}
+                Mois:{rowData.mois}
+                {/* Add more data fields as needed */}
+              </div>
+            </td>
+            <td>
+              {/* Render the response for each row */}
+              <div>
+                Response: {tableResponses[index]}
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
     </div>
   );
 }

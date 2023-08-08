@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import FormInput from "./components/FormInput.js";
 import Graphs from "./components/Graphs.js";
-import Navbar from "./components/Navbar";
+import Table from "./components/Table.js";
 
 const App = () => {
   return (
@@ -11,6 +11,7 @@ const App = () => {
           <FormInput/>
           </form>
           <Graphs/>
+          <Table/>
     </div>
   );
 };
