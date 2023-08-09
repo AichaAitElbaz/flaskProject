@@ -2,10 +2,11 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
   }
   
   .inputContainer {
-    margin-top: 50px;
+    margin-top: 2cm;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -15,14 +16,15 @@
   
   h3{
     margin-left: 30px;
+    margin-top: 2cm;
   }
 
   .resultContainer {
     border: 1px solid #f0e8e1;
     padding: 10px;
     width: 700px;
-    margin-left: 15px;
-    margin-top: 10px;
+    margin-left: 30%;
+    margin-top: 4cm;
     height:600px ;
     align-items: left;
   }

@@ -1,9 +1,10 @@
 import React , {useEffect} from 'react'
 import './Navbar.css';
-import { NavLink,useHistory } from 'react-router-dom';
+import {  NavLink ,
+ useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 const Navbar = () => {
-  const history = useHistory();
+  const history = useNavigate();
   function animation(){
     var tabsNewAnim = $('#navbarSupportedContent');
     var activeItemNewAnim = tabsNewAnim.find('.active');
@@ -44,25 +45,22 @@ const Navbar = () => {
 
   return (
   <nav className="navbar navbar-expand-lg navbar-mainbg">
-    
-    <NavLink className="navbar-brand navbar-logo" to="/" exact>
+    {/* <NavLink className="navbar-brand navbar-logo" to="/" exact>
         <a
           style={{ textDecoration: 'none', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', color: 'inherit' }}
           onClick={() => history.push('/')}
         >
           My application
         </a>
-      </NavLink>
-    
-    
-      <button 
+      </NavLink> */}
+      {/* <button 
         className="navbar-toggler"
         onClick={ function(){
           setTimeout(function(){ animation(); });
         }}
         type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i className="fas fa-bars text-white"></i>
-      </button>
+      </button> */}
  
       <div 
         className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -73,22 +71,20 @@ const Navbar = () => {
             </div>
             
             <li className="nav-item active">
-              <NavLink className="nav-link" to="/" exact>
-                
-               
-                <span style={{ fontSize: '20px' , fontWeight: 'bold'}}>Home</span>
+              <NavLink className="nav-link" to="/" exact> 
+                <span style={{ fontSize: '15px' , fontWeight: ''}}>Home</span>
               </NavLink>
             </li>
 
             <li className="nav-item">
-              <NavLink className="nav-link" to="/about" exact>
-                <span style={{ fontSize: '20px' , fontWeight: 'bold'}}>Form</span>
+              <NavLink className="nav-link" to="/form" exact>
+                <span style={{ fontSize: '15px' , fontWeight: ''}}>Form</span>
               </NavLink> 
             </li>
 
             <li className="nav-item">
-              <NavLink className="nav-link" to="/service" exact>
-                <span style={{ fontSize: '20px' , fontWeight: 'bold'}}>Charts</span>
+              <NavLink className="nav-link" to="/charts" exact>
+                <span style={{ fontSize: '15px' , fontWeight: ''}}>Charts</span>
               </NavLink>
             </li>
         </ul>

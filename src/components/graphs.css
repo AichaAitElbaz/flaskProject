@@ -5,26 +5,27 @@
 /* CSS */
 .charts-container {
   display: flex; 
+  margin-top: 40px;
 }
 
 /* Optional: To add some spacing between the charts */
 .charts-container > :not(:last-child) {
-  margin-left: 10px;
+  margin-left: 50px;
 
 }
 .form-row {
   display: flex;
+  margin-left: 3cm;
 }
 
 .form-row .col-md-6 {
   flex: 1;
-  margin-left: 15px; /* Facultatif - Pour ajouter un espace entre les deux éléments */
 }
 
-/* .selectField{
+.selectField{
   height: 15px;
-  margin-left: 20px;
-} */
+  margin-top: 0.1cm;
+}
 #year{
   padding: 8px;
   font-size: 15px;
@@ -33,34 +34,89 @@
   width: 80px;
   height: 35px;
 
-
 }
-#label{
 
-  margin-left: 25px;
+#label{
+  margin-left: 105px;
 }
 #choose_file{
   height: 35px;
   text-align: start;
-text-size-adjust: 12px;
+  text-size-adjust: 12px;
 }
 .wrapper{
   border: 1px solid #d5cce4;
   padding: 5px;
-  margin-left: 10px;
+  margin-left: 5cm;
   width: 80cm;
   margin: 0 auto;
   align-items: left;
 }
+
 #pie_chart{
-  margin-top: 3cm;
-  margin-left: 2cm;
+  margin-top: 1cm;
+  margin-left: 4cm;
+  width: 400px;   /* Adjust width as needed */
+  height: 400px; 
 }
 .smaller-text-button {
   font-size: 12px;
   width: 12cm;
   height: 25px;
   text-align: center;
-  margin-left: 45px;
   line-height: 2px; 
+}
+.table th {
+  background-color: #743a3a;
+  font-weight: bold;
+  font-size: 12px; /* Increase the font size */
+  padding: 12px; /* Adjust the padding as needed */
+  border: 1px solid #000000;
+  color: #b38fee;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 100px;
+}
+
+#rep{
+  background-color:#afab97c3 ;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  
+}
+.table tr {
+  background-color: #b9beca; /* Set the default background color */
+  color: #0f0d0d; /* Set the default text color */
+}
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #000000;
+}
+.table tr:hover td {
+  color: #1b0937; /* Change to the desired text color */
+}
+.table th {
+  background-color: #9296ba;
+  font-weight: bold;
+  color: #1e0f35;
+}
+
+.table tr:nth-child(even) {
+  background-color: #b9beca;
+}
+
+.table tr:hover {
+  background-color: #aab3c3; /* Change to the desired hover color */
+  color: #ffffff; /* Change to the desired text color on hover */
 }

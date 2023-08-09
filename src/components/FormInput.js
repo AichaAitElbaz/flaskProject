@@ -103,8 +103,7 @@ const FormInput = () => {
     return (
       <>
 
-        <h3><u>Faites une Prédiction - Type de Puits</u></h3>
-        <br/>
+        {/* <h3><u>Faites une Prédiction - Type de Puits</u></h3> */}
         <div className="resultContainer">
 
         <div className="inputContainer">

@@ -21,7 +21,7 @@ html, body {
   padding: 0;
   height: 100%;
   max-height: 250cm;
-  background: linear-gradient(-135deg, #ccdce9, #585b82);
+  background:#8f90b1; /* fallback for old browsers */
 }
 .centered {
   text-align: left;
@@ -44,7 +44,7 @@ button {
 }
 
 button:hover {
-  background-color: #8797e8;
+  background-color: #542575;
 }
 
 
@@ -76,14 +76,14 @@ button:hover {
 } */
 
 
-.wrapper{
+/* .wrapper{
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
   overflow-x: hidden;
-  padding: 20px;
+  padding: 10px;
   align-items: initial;
-}
+} */
 
 .custom-form{
   width: 500px;

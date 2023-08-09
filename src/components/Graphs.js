@@ -4,7 +4,12 @@ import * as XLSX from 'xlsx';
 import axios from 'axios'; // Import axios for HTTP requests
 
 import './graphs.css'; // Import the CSS file
-  
+import { saveAs } from 'file-saver';
+
+// ... Your component code ...
+
+
+
 function Linechart() {
 
   const [predictionValues, setPredictionValues] = useState([]);
@@ -303,18 +308,31 @@ function Linechart() {
 
   };
 
-// Function to prepare data for the pie chart
-
+  const downloadCSV = () => {
+    const csvData = prepareCSVData(); // Implement this function to format your data as CSV
+  
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'table-data.csv');
+  };
+  const prepareCSVData = () => {
+    const header = ['Latitude', 'Longitude', 'P', /* ... */ 'SDAT'].join(',');
+    const rows = tableData.map((item) => {
+      return Object.values(item).join(',');
+    });
+    const csvData = [header, ...rows].join('\n');
+    return csvData;
+  };
+  
   return (
     <div className="wrapper">
-      <br/>
+      <br/><br/>
 
-    <h3><u>Courbes de prédictions annuelles</u></h3>
-    <br/>
+    {/* <h3><u>Courbes de prédictions annuelles</u></h3> */}
+    <br/><br/>
     <div className="form-group">
     <form className="form-group custom-form" onSubmit={handleFileSubmit}>
   <div className="form-row align-items-center">
-  <div className="col-md-6">
+  <div className="col-md-6" >
       <input id='choose_file' type="file" className="form-control" required onChange={handleFile} />
     </div>
     <div className="col-md-6">
@@ -333,12 +351,15 @@ function Linechart() {
               {year}
             </option>
           ))}
+
         </select>
+        <button type="submit"  className="btn btn-primary smaller-text-button">Confirmer</button>
+
       </div>
+
     </div>
-  
+
   </div>
-  <button type="submit"  className="btn btn-primary smaller-text-button">Confirmer</button>
 </form>
 
 </div>
@@ -351,57 +372,108 @@ function Linechart() {
         series={product}
         options={option}
       />
+     <div  style={{ marginLeft: '4cm' }}>
+  <Chart
+    type="line"
+    width={400}
+    height={300}
+    series={series}
+    options={option2}
+  />
+</div>
       <div id='pie_chart'>
    {predictionClasses.length > 0 && (
-        <Chart
-          options={preparePieChartData().options}
+          <Chart
+          options={{
+            ...preparePieChartData().options,
+            chart: {
+              height: 800, // Adjust the height as needed
+              ...preparePieChartData().options.chart,
+            },
+          }}
           series={preparePieChartData().series}
           type="pie"
-          height={350}
+          height={500}
         />
+        
       )}
+      
       </div>
   </div>
   
-  <Chart
-       type="line"
-        width={400}
-      height={300}
-      series={series}
-      options={option2}
-    />
-    <table>
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Response</th>
-        </tr>
-      </thead>
-      <tbody>
-        {/* Render table rows for data and responses */}
-        {tableData.map((rowData, index) => (
-          <tr key={index}>
-            <td>
-              {/* Render the data for each row */}
-              <div>
-                Latitude: {rowData.latitude}
-                Longitude: {rowData.longitude}
-                Annee:{rowData.annee}
-                Mois:{rowData.mois}
-                {/* Add more data fields as needed */}
-              </div>
-            </td>
-            <td>
-              {/* Render the response for each row */}
-              <div>
-                Response: {tableResponses[index]}
-              </div>
-            </td>
+ 
+  <button onClick={downloadCSV} style={{
+    width: '10cm',
+    height: '0.5cm',
+    textAlign: 'center',
+    fontSize: '12px', // Adjust the font size as needed
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft:"0.2cm",
+  }} >Télécharger un fichier CSV</button>
+
+      
+      <table className="table" >
+        <thead>
+          <tr>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>P</th>
+            <th>T</th>
+            <th>Tmax</th>
+            <th>Tmin</th>
+            <th>PET</th>
+            <th>qm</th>
+            <th>SPI3</th>
+            <th>SPI6</th>
+            <th>SPI9</th>
+            <th>SPI12</th>
+            <th>SPI8</th>
+            <th>SP24</th>
+            <th>SP32</th>
+            <th>SPEI3</th>
+            <th>SPEI6</th>
+            <th>SPEI9</th>
+            <th>SPEI12</th>
+            <th>SPEI8</th>
+            <th>SPEI24</th>
+            <th>SPEI32</th>
+            <th id='rep'>SDAT</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {tableData.map((item, index) => (
+            <tr key={index}>
+              <td>{item.latitude}</td>
+              <td>{item.longitude}</td>
+              <td>{item.P}</td>
+              <td>{item.T}</td>
+              <td>{item.Tmax}</td>
+              <td>{item.Tmin}</td>
+              <td>{item.PET}</td>
+              <td>{item.qm}</td>
+              <td>{item.SPI3}</td>
+              <td>{item.SPI6}</td>
+              <td>{item.SPI9}</td>
+              <td>{item.SPI12}</td>
+              <td>{item.SPI8}</td>
+              <td>{item.SP24}</td>
+              <td>{item.SP32}</td>
+              <td>{item.SPEI3}</td>
+              <td>{item.SPEI6}</td>
+              <td>{item.SPEI9}</td>
+              <td>{item.SPEI12}</td>
+              <td>{item.SPEI8}</td>
+              <td>{item.SPEI24}</td>
+              <td>{item.SPEI32}</td>
+              <td id='rep'>{tableResponses[index]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+    
   );
 }
 
