@@ -13,7 +13,7 @@ const FormInput = () => {
 
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [selectedYear, setSelectedYear] = useState(0);
-  const [inputs, setInputs] = useState(Array(23).fill(""));
+  const [inputs, setInputs] = useState(Array(22).fill(""));
   const [predictedClass, setPredictedClass] = useState("");
   const handleMonthChange = (event) => {
     setSelectedMonth(Number(event.target.value));
@@ -55,7 +55,6 @@ const FormInput = () => {
     "SPEI8",
     "SPEI24",
     "SPEI32",
-    "SDAT",
   ];
 
  const handlePredict = () => {
@@ -82,7 +81,6 @@ const FormInput = () => {
     SPEI8: parseFloat(inputs[19]),
     SPEI24: parseFloat(inputs[20]),
     SPEI32: parseFloat(inputs[21]),
-    SDAT: parseFloat(inputs[22]), // Add "SDAT" input value
     annee: parseFloat(selectedYear),
     mois: parseFloat(selectedMonth),
   };
@@ -104,16 +102,20 @@ const FormInput = () => {
   const renderInputs = () => {
     return (
       <>
-        <h1>Prediction</h1>
+
+        {/* <h3><u>Faites une Prédiction - Type de Puits</u></h3> */}
+        <div className="resultContainer">
+
         <div className="inputContainer">
+
           <div className="selectField">
-            <label htmlFor="monthSelect">Month:</label>
+            
             <select
               id="monthSelect"
               value={selectedMonth}
               onChange={handleMonthChange}
             >
-              <option value={0}>-- Select Month --</option>
+              <option value={0}>Mois</option>
               {Array.from({ length: 12 }, (_, index) => (
                 <option key={index} value={index + 1}>
                   {new Date(0, index).toLocaleString("default", {
@@ -125,13 +127,12 @@ const FormInput = () => {
           </div>
 
           <div className="selectField">
-            <label htmlFor="yearSelect">Year:</label>
             <select
               id="yearSelect"
               value={selectedYear}
               onChange={handleYearChange}
             >
-              <option value={0}>-- Select Year --</option>
+              <option value={0}>Année</option>
               {yearOptions.map((year) => (
                 <option key={year} value={year}>
                   {year}
@@ -151,9 +152,15 @@ const FormInput = () => {
             />
           ))}
         </div>
-        <button type="button" onClick={handlePredict}>Predict</button>
-        <h3>Resultat: {predictedClass}</h3> {/* Display the predicted class */}
-      </>
+        <br/>
+        
+        <div className="resultRow">
+
+        <button type="button" id="btn" onClick={handlePredict}>Predict</button>
+         <h3 id="result">Resultat: {predictedClass}</h3> {/* Display the predicted class */}
+  </div>
+</div>
+       </>
     );
   };
 

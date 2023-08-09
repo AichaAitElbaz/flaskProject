@@ -1,0 +1,179 @@
+/* Navbar.css */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background:#8f90b1; /* fallback for old browsers */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.navbar {
+  position: fixed;
+  top: 1;
+  left: 0;
+  width: 100%;
+  background-color:rgb(27, 6, 49);
+  color: #fff;
+  padding: 0px;
+  z-index: 100;
+}
+
+.navbar-logo {
+  padding: 15px;
+  color: #d7cfe3;
+  pointer-events: none;
+}
+
+#navbarSupportedContent {
+  overflow: hidden;
+  margin-right: 40px;
+}
+
+#navbarSupportedContent ul {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  list-style: none;
+}
+
+#navbarSupportedContent ul li {
+  margin: 0;
+}
+
+#navbarSupportedContent ul li a {
+  color: #d7cfe3;
+  text-decoration: none;
+  font-size: 10px;
+  padding: 20px;
+  transition: 0.6s ease;
+  position: relative;
+  
+}
+
+#navbarSupportedContent ul li a i {
+  margin-right: 10px;
+}
+
+#navbarSupportedContent ul li.active a {
+  color: #000000;
+  background-color: transparent;
+  transition: all 0.7s;
+}
+
+#navbarSupportedContent a:not(:only-child):after {
+  content: '\f105';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-family: 'Font Awesome 5 Free';
+  display: inline-block;
+  padding-right: 3px;
+  vertical-align: middle;
+  font-weight: 900;
+  transition: 0.5s;
+}
+
+#navbarSupportedContent .active > a:not(:only-child):after {
+  transform: rotate(90deg);
+}
+
+.hori-selector {
+  display: inline-block;
+  position: absolute;
+  height: 1cm;
+  top: 0;
+  left: 0;
+  transition: 0.6s ease;
+  background-color: #d7cfe3;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  margin-top: 1px;
+}
+
+.hori-selector .right,
+.hori-selector .left {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background-color: #1c1a1a;
+  bottom: 10px;
+}
+
+.hori-selector .right {
+  right: -25px;
+}
+
+.hori-selector .left {
+  left: -25px;
+}
+
+.hori-selector .right:before,
+.hori-selector .left:before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #2c0245;
+}
+
+.hori-selector .right:before {
+  bottom: 0;
+  right: -25px;
+}
+
+.hori-selector .left:before {
+  bottom: 0;
+  left: -25px;
+}
+
+@media (max-width: 991px) {
+  #navbarSupportedContent ul {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  #navbarSupportedContent ul li {
+    margin-bottom: 5px;
+  }
+
+  .hori-selector {
+    margin-top: 0;
+    margin-left: 0px;
+    border-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+  }
+
+  .hori-selector .left,
+  .hori-selector .right {
+    right: 10px;
+  }
+
+  .hori-selector .left {
+    top: -25px;
+    left: auto;
+  }
+
+  .hori-selector .right {
+    bottom: -25px;
+  }
+
+  .hori-selector .left:before {
+    left: -25px;
+    top: -25px;
+  }
+
+  .hori-selector .right:before {
+    bottom: -25px;
+    left: -25px;
+  }
+}
