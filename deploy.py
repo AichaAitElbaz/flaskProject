@@ -4,11 +4,21 @@ import pickle
 import sklearn
 import xlsxwriter
 import io
+import json
+import numpy as np  # Import the numpy library for array operations
+
 app = Flask(__name__)
 
-model = pickle.load(open('classification_model.sav', 'rb'))
-regr_model = pickle.load(open('regression_model.pkl', 'rb'))
-qm_model=pickle.load(open('qm_model.sav', 'rb'))
+model = pickle.load(open('classif_model.sav', 'rb'))
+regr_model = pickle.load(open('model.sav', 'rb'))
+# qm_model=pickle.load(open('reg_model.sav', 'rb'))
+
+
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, np.float32):
+            return float(o)  # Convert np.float32 to Python float
+        return super().default(o)
 
 @app.route('/')
 def home():
@@ -21,45 +31,47 @@ def predict():
     data = request.get_json()
     inputs = [
         data['latitude'], data['longitude'], data['annee'], data['mois'], data['P'], data['T'],
-        data['Tmax'], data['Tmin'], data['PET'], data['qm'], data['SPI3'], data['SPI6'], data['SPI9'],
+        data['Tmax'], data['Tmin'], data['PET'], data['SPI3'], data['SPI6'], data['SPI9'],
         data['SPI12'], data['SPI8'], data['SP24'], data['SP32'], data['SPEI3'], data['SPEI6'],
         data['SPEI9'], data['SPEI12'], data['SPEI8'], data['SPEI24'], data['SPEI32']
     ]
-    predicted_class = model.predict([inputs])[0]
+    inputs_list = np.array(inputs).astype(np.float32).tolist()
+
+    # Faire la prédiction
+    predicted_class = model.predict([inputs_list])[0]
+    
     response = {'predicted_class': predicted_class}
     return jsonify(response)
+
 
 @app.route('/regr', methods=['POST'])
 def predict_regr():
     data = request.get_json()
     inputs = [
         data['latitude'], data['longitude'], data['annee'], data['mois'], data['P'], data['T'],
-        data['Tmax'], data['Tmin'], data['PET'], data['qm'], data['SPI3'], data['SPI6'], data['SPI9'],
+        data['Tmax'], data['Tmin'], data['PET'], data['SPI3'], data['SPI6'], data['SPI9'],
         data['SPI12'], data['SPI8'], data['SP24'], data['SP32'], data['SPEI3'], data['SPEI6'],
         data['SPEI9'], data['SPEI12'], data['SPEI8'], data['SPEI24'], data['SPEI32']
     ]
     prediction= regr_model.predict([inputs])[0] # Convert to int
+    # return jsonify(prediction)
     return jsonify(prediction)
 
-
-@app.route('/qm', methods=['POST'])
-def predict_qm():
-    data = request.get_json()
-    inputs = [
-        data['latitude'], data['longitude'], data['annee'], data['mois'], data['P'], data['T'],
-        data['Tmax'], data['Tmin'], data['PET'], data['P766i'], data['SPI3'], data['SPI6'], data['SPI9'],
-        data['SPI12'], data['SPI8'], data['SP24'], data['SP32'], data['SPEI3'], data['SPEI6'],
-        data['SPEI9'], data['SPEI12'], data['SPEI8'], data['SPEI24'], data['SPEI32'],data['P766_SDAT']
-    ]
-    prediction= qm_model.predict([inputs])[0] # Convert to int
-    return jsonify(prediction)
-
+# @app.route('/qm', methods=['POST'])
+# def predict_qm():
+#     data = request.get_json()
+#     inputs = [
+#         data['latitude'], data['longitude'], data['annee'], data['mois'], data['P'], data['T'],
+#         data['Tmax'], data['Tmin'], data['PET'], data['P766i'], data['SPI3'], data['SPI6'], data['SPI9'],
+#         data['SPI12'], data['SPI8'], data['SP24'], data['SP32'], data['SPEI3'], data['SPEI6'],
+#         data['SPEI9'], data['SPEI12'], data['SPEI8'], data['SPEI24'], data['SPEI32'],data['P766_SDAT']
+#     ]
+#     prediction= qm_model.predict([inputs])[0] # Convert to int
+#     return jsonify(prediction)
 
 
-# Sample data for demonstration purposes
-tableQmData = [...]  # Your data here
-tableQmResponses = [...]  # Your data here
-tableResponses = [...]  # Your data here
+
+
 
 @app.route('/download_excel', methods=['GET'])
 def download_excel():

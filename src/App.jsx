@@ -10,9 +10,7 @@ import {
   Routes 
 } from 'react-router-dom';
 
-import About from './components/pages/About/About.js';
-import Home from './components/pages/Home/Home.js';
-import Services from './components/pages/Service/Services.js';
+
 import Navbar from './components/Navbar/Navbar.js';
 
 const App = () => {
@@ -21,7 +19,7 @@ const App = () => {
     <Navbar />
     <main>
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/form" element={<FormInput />} />
         <Route path="/charts" element={<Graphs />} />
         <Route path="*" element={<Navigate to="/form" />} />
