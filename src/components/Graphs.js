@@ -30,19 +30,7 @@ function Linechart() {
   };
 
   // Uncomment and declare the product state
-  const [product, setProduct] = useState([
-    {
-      name: "Tmax",
-      data: [],
-    },
-    {
-      name: "Tmin",
-      data: [],
-    },
-        
  
-  ]);
-
   
 
   const [tableData, setTableData] = useState([]);
@@ -76,10 +64,6 @@ function Linechart() {
     }
   };
 
-  const series = [{
-    name: "Prediction Value",
-    data: predictionValues,
-  }];
 
   const handleFileSubmit = (e) => {
     generateTable();
@@ -246,63 +230,104 @@ function Linechart() {
     
  
   const [userYear, setUserYear] = useState('');
+  const [filteredSdatMap, setFilteredSdatMap] = useState({});
+  const [filtredTmaxMap, setFiltredTmaxMap] = useState({});
+  const [filtredTminMap, setFiltredTminMap] = useState({});
+
+  const [pieChartOptions, setPieChartOptions] = useState({});
 
   useEffect(() => {
 
-    const tmaxData = filteredData.map(item => item.Tmax);
-    const tminData = filteredData.map(item => item.Tmin);
-    
-    setProduct([
-      {
-        name: "Tmax",
-        data: tmaxData,
-      },
-      {
-        name: "Tmin",
-        data: tminData,
-      },
-    ]);
+    const newFilteredSdatMap = {};
+    const newFiltredTmaxMap = {};
+    const newFiltredTminMap = {};
+
+    for (let i = 0; i < tableData.length; i++) {
+        if (tableData[i].annee === Number(userYear)) {
+            const mois = tableData[i].mois;
+            newFilteredSdatMap[mois] = tableResponses[i];
+            newFiltredTmaxMap[mois] = tableData[i].Tmax;
+            newFiltredTminMap[mois] = tableData[i].Tmin;
+        }
+    }
+
+    setFilteredSdatMap(newFilteredSdatMap);
+    setFiltredTmaxMap(newFiltredTmaxMap);
+    setFiltredTminMap(newFiltredTminMap);
     setPredictionClasses(predictionClasses);
 
-  }, [excelData, userYear]
+
+
+    const pieChartData = preparePieChartData(predictionClasses);
+
+        setPieChartOptions({
+            series: pieChartData.series,
+            options: {
+                labels: pieChartData.labels,
+            },
+        });
+  }, [excelData, userYear,predictionClasses]
   
   );
-  const filteredData = excelData ? excelData.filter((item) => item.annee === Number(userYear)) : [];
-    filteredData.sort((a, b) => a.Month - b.Month);
+
     const customColors = ['#E29414','#231483','#528314 '];
 
-  const uniqueMonths = [...new Set(filteredData.map(item => item.mois))];
-  uniqueMonths.sort((a, b) => a - b);
 
-  const [option, setOption] = useState({
-    title: { text: "Température annuelle" },
-    xaxis: {
-      title: { text: "Mois" },
-      categories: uniqueMonths, // Assigning unique months to categories
 
-    
-    },
-    yaxis: {
-      title: { text: "Températures" },
-    },
-    colors: customColors,
 
-  });
 
-  const option2 = {
-    title: { text: "Valeurs de SDAT prédites" },
-    xaxis: {
-        title: { text: "Mois" },
-        categories: uniqueMonths, // Assigning unique months to categories
+for (let i = 0; i < tableData.length; i++) {
+    if (tableData[i].annee === Number(userYear)) {
+        const mois = tableData[i].mois;
+        filteredSdatMap[mois] = tableResponses[i];
+        filtredTmaxMap[mois]=tableData[i].Tmax;
+        filtredTminMap[mois]=tableData[i].Tmin
 
-    },
-    yaxis: {
-        title: { text: "valeurs prédites" },
-    },
-    colors: customColors,
+    }
+}
+const product= [
+  {
+    name: "Tmax",
+    data: Object.values(filtredTmaxMap), 
+},
+{
+    name: "Tmin",
+    data: Object.values(filtredTminMap), 
+}
+      
+
+];
+
+const series = [{
+  name: "Prediction Value",
+  data: Object.values(filteredSdatMap), 
+}];
+const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+const option = {
+  title: { text: "Température annuelle" },
+  xaxis: {
+    title: { text: "Mois" },
+    categories:  Object.keys(filtredTmaxMap), // Assigning unique months to categories
+
+  
+  },
+  yaxis: {
+    title: { text: "Températures" },
+  },
+  colors: customColors,
 
 };
-
+const option2 = {
+  title: { text: "Valeurs de SDAT prédites" },
+  xaxis: {
+      title: { text: "Mois" },
+      categories: Object.keys(filteredSdatMap),
+  },
+  yaxis: {
+      title: { text: "valeurs prédites" },
+  },
+  colors: customColors,
+};
 
   const handleDownload = () => {
     const csvData = Papa.unparse(
@@ -375,11 +400,8 @@ function Linechart() {
     </option>
   ))}
 </select>
-    
-  
     <div className="col-md-6">
       <div className="selectField">
- 
         <button type="submit"  className="btn btn-primary smaller-text-button">Confirmer</button>
 
       </div>

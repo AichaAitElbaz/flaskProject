@@ -174,7 +174,6 @@ const FormInput = () => {
               ))}
             </select>
           </div>
-
           <div className="selectField">
             <select
               id="yearSelect"
@@ -202,18 +201,14 @@ const FormInput = () => {
           ))}
         </div>
         <br/>
-        
         <div className="resultRow">
-
         <button type="button" id="btn" onClick={handlePredict}>Prédire</button>
          <h3 id="result">SDAT: {predictedClass}</h3> {/* Display the predicted class */}
   </div>
 </div>
-
        </>
     );
   };
-
   return <div className="formInput">{renderInputs()}</div>;
 };
 
